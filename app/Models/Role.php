@@ -27,6 +27,18 @@ class Role extends Model
         'deleted_at',
     ];
 
+    public const ADMIN = 'admin';
+    public const SUPER_ADMIN = 'super';
+    public const USER = 'user';
+    public const EMPLOYEE = 'employee';
+
+    public const ROLES = [
+        self::ADMIN,
+        self::SUPER_ADMIN,
+        self::USER,
+        self::EMPLOYEE
+    ];
+
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
