@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
+use App\Models\Role;
 
 class User extends Authenticatable
 {
@@ -51,6 +52,11 @@ class User extends Authenticatable
         'deleted_at',
     ];
 
+    public const GAL_BENCE = 'galbence';
+    public const KISS_ZSOFIA = 'kisszsofia';
+    public const MULLER_JULIA = 'mullerjulia';
+    public const VANDA_TIMEA = 'vandatimea';
+
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
@@ -58,7 +64,8 @@ class User extends Authenticatable
 
     public function getIsAdminAttribute()
     {
-        return $this->roles()->where('id', 1)->exists();
+        $admin = Role::where('slug', '=', Role::ADMIN)->first();
+        return $this->roles()->where('id',  $admin->id)->exists();
     }
 
     public function __construct(array $attributes = [])
@@ -131,5 +138,10 @@ class User extends Authenticatable
     public function transactions()
     {
         return $this->belongsToMany(Transaction::class);
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'user_id', 'id');
     }
 }
