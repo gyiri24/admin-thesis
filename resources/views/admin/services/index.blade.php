@@ -23,9 +23,6 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.service.fields.id') }}
-                        </th>
-                        <th>
                             {{ trans('cruds.service.fields.name') }}
                         </th>
                         <th>
@@ -49,19 +46,16 @@
 
                             </td>
                             <td>
-                                {{ $service->id ?? '' }}
-                            </td>
-                            <td>
                                 {{ $service->name ?? '' }}
                             </td>
                             <td>
-                                {{ $service->price ?? '' }}
+                                {{ $service->fullPrice ?? '' }}
                             </td>
                             <td>
-                                {{ $service->duration ?? '' }}
+                                {{ $service->fullDuration ?? '' }}
                             </td>
                             <td>
-                                {{ $service->user->name ?? '' }}
+                                {{ $service->user->fullName ?? '' }}
                             </td>
                             <td>
                                 @can('service_show')
@@ -142,7 +136,7 @@
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();
   });
-  
+
 })
 
 </script>

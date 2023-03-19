@@ -23,9 +23,6 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.transaction.fields.id') }}
-                        </th>
-                        <th>
                             {{ trans('cruds.transaction.fields.user') }}
                         </th>
                         <th>
@@ -33,6 +30,9 @@
                         </th>
                         <th>
                             {{ trans('cruds.transaction.fields.service') }}
+                        </th>
+                        <th>
+                            {{ trans('cruds.transaction.fields.created_at') }}
                         </th>
                         <th>
                             &nbsp;
@@ -46,20 +46,16 @@
 
                             </td>
                             <td>
-                                {{ $transaction->id ?? '' }}
+                                {{ $transaction->user->fullName }}
                             </td>
                             <td>
-                                @foreach($transaction->users as $key => $item)
-                                    <span class="badge badge-info">{{ $item->name }}</span>
-                                @endforeach
+                                {{ $transaction->fullPrice ?? '' }}
                             </td>
                             <td>
-                                {{ $transaction->price ?? '' }}
+                                {{ $transaction->service->name }}
                             </td>
                             <td>
-                                @foreach($transaction->services as $key => $item)
-                                    <span class="badge badge-info">{{ $item->price }}</span>
-                                @endforeach
+                                {{ $transaction->service->created_at }}
                             </td>
                             <td>
                                 @can('transaction_show')
@@ -140,7 +136,7 @@
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();
   });
-  
+
 })
 
 </script>

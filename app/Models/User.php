@@ -68,6 +68,11 @@ class User extends Authenticatable
         return $this->roles()->where('id',  $admin->id)->exists();
     }
 
+    public function getFullNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);

@@ -31,7 +31,7 @@ class Transaction extends Model
         return $date->format('Y-m-d H:i:s');
     }
 
-    public function users()
+    /*public function users()
     {
         return $this->belongsToMany(User::class);
     }
@@ -39,5 +39,21 @@ class Transaction extends Model
     public function services()
     {
         return $this->belongsToMany(Service::class);
+    }*/
+
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    public function service()
+    {
+        return $this->hasOne(Service::class, 'id', 'service_id');
+    }
+
+    public function getFullPriceAttribute()
+    {
+        return $this->price . ' ' . 'ft';
     }
 }

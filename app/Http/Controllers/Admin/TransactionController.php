@@ -19,7 +19,7 @@ class TransactionController extends Controller
     {
         abort_if(Gate::denies('transaction_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $transactions = Transaction::with(['users', 'services'])->get();
+        $transactions = Transaction::with(['user', 'service'])->get();
 
         return view('admin.transactions.index', compact('transactions'));
     }
@@ -30,13 +30,14 @@ class TransactionController extends Controller
 
         $users = User::pluck('name', 'id');
 
-        $services = Service::pluck('price', 'id');
+        $services = Service::pluck('name', 'id');
 
         return view('admin.transactions.create', compact('services', 'users'));
     }
 
     public function store(StoreTransactionRequest $request)
     {
+        dd($request->all());
         $transaction = Transaction::create($request->all());
         $transaction->users()->sync($request->input('users', []));
         $transaction->services()->sync($request->input('services', []));
@@ -48,11 +49,11 @@ class TransactionController extends Controller
     {
         abort_if(Gate::denies('transaction_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::pluck('name', 'id');
+        $users = User::pluck('last_name', 'id');
 
-        $services = Service::pluck('price', 'id');
+        $services = Service::pluck('name', 'id');
 
-        $transaction->load('users', 'services');
+        $transaction->load('user', 'service');
 
         return view('admin.transactions.edit', compact('services', 'transaction', 'users'));
     }
@@ -70,7 +71,7 @@ class TransactionController extends Controller
     {
         abort_if(Gate::denies('transaction_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $transaction->load('users', 'services');
+        $transaction->load('user', 'service');
 
         return view('admin.transactions.show', compact('transaction'));
     }

@@ -40,4 +40,14 @@ class Service extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function getFullPriceAttribute()
+    {
+        return $this->price . ' ' . 'ft';
+    }
+
+    public function getFullDurationAttribute()
+    {
+        return $this->duration . ' ' . 'perc';
+    }
 }

@@ -8,11 +8,6 @@
 
     <div class="card-body">
         <div class="form-group">
-            <div class="form-group">
-                <a class="btn btn-default" href="{{ route('admin.services.index') }}">
-                    {{ trans('global.back_to_list') }}
-                </a>
-            </div>
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
@@ -44,7 +39,7 @@
                             {{ trans('cruds.service.fields.price') }}
                         </th>
                         <td>
-                            {{ $service->price }}
+                            {{ $service->fullPrice ?? '' }}
                         </td>
                     </tr>
                     <tr>
@@ -52,7 +47,7 @@
                             {{ trans('cruds.service.fields.duration') }}
                         </th>
                         <td>
-                            {{ $service->duration }}
+                            {{ $service->fullDuration ?? '' }}
                         </td>
                     </tr>
                     <tr>
@@ -60,7 +55,7 @@
                             {{ trans('cruds.service.fields.user') }}
                         </th>
                         <td>
-                            {{ $service->user->name ?? '' }}
+                            {{ $service->user->fullName ?? '' }}
                         </td>
                     </tr>
                 </tbody>

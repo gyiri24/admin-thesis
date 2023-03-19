@@ -24,9 +24,6 @@ class StoreTransactionRequest extends FormRequest
                 'required',
                 'array',
             ],
-            'price' => [
-                'required',
-            ],
             'services.*' => [
                 'integer',
             ],
