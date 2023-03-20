@@ -7,6 +7,7 @@ use App\Http\Requests\MassDestroyRatingRequest;
 use App\Http\Requests\StoreRatingRequest;
 use App\Http\Requests\UpdateRatingRequest;
 use App\Models\Rating;
+use App\Models\Service;
 use App\Models\Transaction;
 use Gate;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class RatingsController extends Controller
     {
         abort_if(Gate::denies('rating_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $ratings = Rating::with(['services'])->get();
+        $ratings = Rating::with(['service'])->get();
 
         return view('admin.ratings.index', compact('ratings'));
     }
@@ -27,15 +28,21 @@ class RatingsController extends Controller
     {
         abort_if(Gate::denies('rating_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $services = Transaction::pluck('price', 'id');
+        $services = Service::pluck('name', 'id');
 
         return view('admin.ratings.create', compact('services'));
     }
 
     public function store(StoreRatingRequest $request)
     {
-        $rating = Rating::create($request->all());
-        $rating->services()->sync($request->input('services', []));
+        $data = $request->only('rating', 'comment', 'service');
+
+        Rating::create([
+            'rating' => $data['rating'],
+            'service_id' => $data['service'],
+            'comment' => $data['comment'] ?? null,
+            'user_id' => auth()->user()->id ?? null
+        ]);
 
         return redirect()->route('admin.ratings.index');
     }

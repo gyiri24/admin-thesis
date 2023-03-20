@@ -25,11 +25,8 @@ class StoreRatingRequest extends FormRequest
                 'max:500',
                 'nullable',
             ],
-            'services.*' => [
-                'integer',
-            ],
             'services' => [
-                'array',
+                'integer',
             ],
         ];
     }

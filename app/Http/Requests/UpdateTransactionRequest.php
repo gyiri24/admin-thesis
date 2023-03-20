@@ -24,9 +24,6 @@ class UpdateTransactionRequest extends FormRequest
                 'required',
                 'array',
             ],
-            'price' => [
-                'required',
-            ],
             'services.*' => [
                 'integer',
             ],

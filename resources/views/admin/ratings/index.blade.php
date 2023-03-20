@@ -55,9 +55,7 @@
                                 {{ $rating->comment ?? '' }}
                             </td>
                             <td>
-                                @foreach($rating->services as $key => $item)
-                                    <span class="badge badge-info">{{ $item->price }}</span>
-                                @endforeach
+                                {{ $rating->service->name ?? '' }}
                             </td>
                             <td>
                                 @can('rating_show')
@@ -138,7 +136,7 @@
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();
   });
-  
+
 })
 
 </script>

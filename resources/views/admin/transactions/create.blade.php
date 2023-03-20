@@ -25,7 +25,7 @@
             </div>
             <div class="form-group">
                 <label class="required" for="services">{{ trans('cruds.transaction.fields.service') }}</label>
-                <select class="form-control select2 {{ $errors->has('services') ? 'is-invalid' : '' }}" name="services" id="services" required>
+                <select class="form-control select2 {{ $errors->has('services') ? 'is-invalid' : '' }}" name="services[]" id="services" required>
                     @foreach($services as $id => $service)
                         <option value="{{ $id }}" {{ in_array($id, old('services', [])) ? 'selected' : '' }}>{{ $service }}</option>
                     @endforeach

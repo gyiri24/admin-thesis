@@ -63,7 +63,7 @@
                 <label class="required" for="user_id">{{ trans('cruds.service.fields.user') }}</label>
                 <select class="form-control select2 {{ $errors->has('user') ? 'is-invalid' : '' }}" name="user_id" id="user_id" required>
                     @foreach($users as $id => $entry)
-                        <option value="{{ $id }}" {{ old('user_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                        <option value="{{ $id }}" {{ old('user_id') == $id ? 'selected' : '' }}>{{ $entry}}</option>
                     @endforeach
                 </select>
                 @if($errors->has('user'))
@@ -77,6 +77,11 @@
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>
+            </div>
+            <div class="form-group">
+                <a class="btn btn-default" href="{{ route('admin.services.index') }}">
+                    {{ trans('global.back_to_list') }}
+                </a>
             </div>
         </form>
     </div>

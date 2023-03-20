@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyServiceRequest;
 use App\Http\Requests\StoreServiceRequest;
 use App\Http\Requests\UpdateServiceRequest;
+use App\Models\Role;
 use App\Models\Service;
 use App\Models\User;
 use Gate;
@@ -27,7 +28,11 @@ class ServiceController extends Controller
     {
         abort_if(Gate::denies('service_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $employeeRole = Role::where('slug', '=', Role::EMPLOYEE)->first();
+
+        $users = User::whereHas('roles', function($query) use($employeeRole) {
+            $query->where('id', '=',  $employeeRole->id);
+        })->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         return view('admin.services.create', compact('users'));
     }
@@ -43,7 +48,11 @@ class ServiceController extends Controller
     {
         abort_if(Gate::denies('service_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $employeeRole = Role::where('slug', '=', Role::EMPLOYEE)->first();
+
+        $users = User::whereHas('roles', function($query) use($employeeRole) {
+            $query->where('id', '=',  $employeeRole->id);
+        })->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $service->load('user');
 

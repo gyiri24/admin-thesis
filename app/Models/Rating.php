@@ -22,6 +22,9 @@ class Rating extends Model
     protected $fillable = [
         'rating',
         'comment',
+        'service_id',
+        'user_id',
+        'comment',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -40,8 +43,13 @@ class Rating extends Model
         return $date->format('Y-m-d H:i:s');
     }
 
-    public function services()
+    public function service()
     {
-        return $this->belongsToMany(Transaction::class);
+        return $this->hasOne(Service::class, 'id', 'service_id');
+    }
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

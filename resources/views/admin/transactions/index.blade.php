@@ -55,7 +55,7 @@
                                 {{ $transaction->service->name }}
                             </td>
                             <td>
-                                {{ $transaction->service->created_at }}
+                                {{ $transaction->created_at }}
                             </td>
                             <td>
                                 @can('transaction_show')

@@ -50,7 +50,10 @@ class User extends Authenticatable
         'created_at',
         'updated_at',
         'deleted_at',
+        'role_id',
     ];
+
+    protected $appends = ['fullName'];
 
     public const GAL_BENCE = 'galbence';
     public const KISS_ZSOFIA = 'kisszsofia';
@@ -67,6 +70,7 @@ class User extends Authenticatable
         $admin = Role::where('slug', '=', Role::ADMIN)->first();
         return $this->roles()->where('id',  $admin->id)->exists();
     }
+
 
     public function getFullNameAttribute()
     {

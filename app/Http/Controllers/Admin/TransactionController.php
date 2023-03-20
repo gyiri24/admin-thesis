@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyTransactionRequest;
 use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
+use App\Models\Role;
 use App\Models\Service;
 use App\Models\Transaction;
 use App\Models\User;
@@ -28,7 +29,11 @@ class TransactionController extends Controller
     {
         abort_if(Gate::denies('transaction_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::pluck('name', 'id');
+        $userRole = Role::where('slug', '=', Role::USER)->first();
+
+        $users = User::whereHas('roles', function($query) use($userRole) {
+            $query->where('id', '=',  $userRole->id);
+        })->pluck('name', 'id');
 
         $services = Service::pluck('name', 'id');
 
@@ -37,10 +42,20 @@ class TransactionController extends Controller
 
     public function store(StoreTransactionRequest $request)
     {
-        dd($request->all());
-        $transaction = Transaction::create($request->all());
-        $transaction->users()->sync($request->input('users', []));
-        $transaction->services()->sync($request->input('services', []));
+        $data = $request->only('users', 'services');
+
+        $userId = $data['users'][0];
+        $serviceId = $data['services'][0];
+
+        $price = Service::find($serviceId);
+
+        Transaction::create(
+            [
+                'price' => $price['price'],
+                'service_id' => $serviceId,
+                'user_id' => $userId,
+            ]
+        );
 
         return redirect()->route('admin.transactions.index');
     }
@@ -49,7 +64,7 @@ class TransactionController extends Controller
     {
         abort_if(Gate::denies('transaction_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::pluck('last_name', 'id');
+        $users = User::pluck('name', 'id');
 
         $services = Service::pluck('name', 'id');
 
@@ -60,9 +75,20 @@ class TransactionController extends Controller
 
     public function update(UpdateTransactionRequest $request, Transaction $transaction)
     {
-        $transaction->update($request->all());
-        $transaction->users()->sync($request->input('users', []));
-        $transaction->services()->sync($request->input('services', []));
+        $data = $request->only('users', 'services');
+
+        $userId = $data['users'][0];
+        $serviceId = $data['services'][0];
+
+        $price = Service::find($serviceId);
+
+        $transaction->update(
+            [
+                'price' => $price['price'],
+                'service_id' => $serviceId,
+                'user_id' => $userId,
+            ]
+        );
 
         return redirect()->route('admin.transactions.index');
     }
