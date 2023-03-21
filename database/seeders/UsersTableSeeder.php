@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -9,7 +10,7 @@ class UsersTableSeeder extends Seeder
 {
     public function run()
     {
-        $users = [
+        /*$users = [
             [
                 'id'                 => 1,
                 'name'               => 'Admin',
@@ -129,6 +130,16 @@ class UsersTableSeeder extends Seeder
             ],
         ];
 
-        User::insert($users);
+        User::insert($users);*/
+
+        User::factory()
+        ->count(100)
+        ->create();
+
+        $user = Role::where('slug', '=', Role::USER)->first();
+
+        User::where('amount', '>', 0)->each(function ($user) {
+            $user->roles()->sync($user->id);
+        });
     }
 }

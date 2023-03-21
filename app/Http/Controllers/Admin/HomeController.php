@@ -8,21 +8,40 @@ class HomeController
 {
     public function index()
     {
-        $settings1 = [
-            'chart_title'           => 'Napi',
+        /*$settings1 = [
+            'chart_title'           => 'Transactions by user',
             'chart_type'            => 'bar',
-            'report_type'           => 'group_by_date',
+            'report_type'           => 'group_by_relationship',
             'model'                 => 'App\Models\Service',
-            'group_by_field'        => 'created_at',
-            'group_by_period'       => 'week',
-            'aggregate_function'    => 'count',
+            'relationship_name'     => 'user',
+            'group_by_field'        => 'user',
+            'aggregate_function'    => 'sum',
+            'aggregate_field'       => 'price',
             'filter_field'          => 'created_at',
             'filter_period'         => 'year',
             'group_by_field_format' => 'Y-m-d H:i:s',
             'column_class'          => 'col-md-4',
             'entries_number'        => '5',
             'translation_key'       => 'service',
-        ];
+        ];*/
+
+
+            $settings1 = [
+                'chart_title'           => 'Users',
+                'chart_type'            => 'line',
+                'report_type'           => 'group_by_date',
+                'model'                 => 'App\Models\User',
+                'group_by_field'        => 'created_at',
+                'group_by_field'        => 'day',
+                'aggregate_function'    => 'count',
+                'filter_field'          => 'created_at',
+                'filter_period'         => 'year',
+                'group_by_field_format' => 'Y-m-d H:i:s',
+                'column_class'          => 'col-md-4',
+                'entries_number'        => '5',
+                'translation_key'       => 'user',
+            ];
+
 
         $chart1 = new LaravelChart($settings1);
 
