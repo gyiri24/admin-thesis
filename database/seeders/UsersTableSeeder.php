@@ -132,14 +132,16 @@ class UsersTableSeeder extends Seeder
 
         User::insert($users);*/
 
-        User::factory()
-        ->count(100)
-        ->create();
-
         $user = Role::where('slug', '=', Role::USER)->first();
+        $array = [77000, 70000, 21000, 14000, 32000, 64000, 11000, 4000, 63000, 54000, 41000, 48000, 34000, 31000, 3000, 9000, 14000, 81000, 36000];
 
-        User::where('amount', '>', 0)->each(function ($user) {
-            $user->roles()->sync($user->id);
-        });
+        for($x = 0; $x <= 100; $x++) {
+            $randomIndex = array_rand($array, 1);
+            $user = User::create([
+
+            ]);
+
+        }
     }
+
 }
