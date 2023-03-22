@@ -141,15 +141,15 @@ class User extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
     }
 
     public function transactions()
     {
-        return $this->belongsToMany(Transaction::class);
+        return $this->belongsTo(Transaction::class, 'user_id', 'id');
     }
 
-    public function service()
+    public function services()
     {
         return $this->belongsTo(Service::class, 'user_id', 'id');
     }

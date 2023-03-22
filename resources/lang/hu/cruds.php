@@ -45,7 +45,7 @@ return [
         'title'          => 'Felhasználók',
         'title_singular' => 'Felhasználó',
         'fields'         => [
-            'id'                        => 'ID',
+            'id'                        => 'Azonosító',
             'id_helper'                 => ' ',
             'name'                      => 'Név',
             'name_helper'               => ' ',

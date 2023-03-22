@@ -30,16 +30,13 @@ class UsersController extends Controller
 
         $roles = Role::pluck('title', 'id');
 
-        $transactions = Transaction::pluck('price', 'id');
-
-        return view('admin.users.create', compact('roles', 'transactions'));
+        return view('admin.users.create', compact('roles'));
     }
 
     public function store(StoreUserRequest $request)
     {
         $user = User::create($request->all());
         $user->roles()->sync($request->input('roles', []));
-        $user->transactions()->sync($request->input('transactions', []));
 
         return redirect()->route('admin.users.index');
     }
@@ -50,11 +47,9 @@ class UsersController extends Controller
 
         $roles = Role::pluck('title', 'id');
 
-        $transactions = Transaction::pluck('price', 'id');
-
         $user->load('roles', 'transactions');
 
-        return view('admin.users.edit', compact('roles', 'transactions', 'user'));
+        return view('admin.users.edit', compact('roles', 'user'));
     }
 
     public function update(UpdateUserRequest $request, User $user)

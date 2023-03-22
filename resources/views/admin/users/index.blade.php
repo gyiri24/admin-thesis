@@ -23,9 +23,6 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.user.fields.id') }}
-                        </th>
-                        <th>
                             {{ trans('cruds.user.fields.name') }}
                         </th>
                         <th>
@@ -58,10 +55,7 @@
 
                             </td>
                             <td>
-                                {{ $user->id ?? '' }}
-                            </td>
-                            <td>
-                                {{ $user->name ?? '' }}
+                                {{ $user->fullName ?? '' }}
                             </td>
                             <td>
                                 {{ $user->email ?? '' }}
@@ -156,14 +150,14 @@
   $.extend(true, $.fn.dataTable.defaults, {
     orderCellsTop: true,
     order: [[ 1, 'desc' ]],
-    pageLength: 100,
+    pageLength: 25,
   });
   let table = $('.datatable-User:not(.ajaxTable)').DataTable({ buttons: dtButtons })
   $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();
   });
-  
+
 })
 
 </script>
