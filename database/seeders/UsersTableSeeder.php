@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\Role;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class UsersTableSeeder extends Seeder
 {
@@ -132,15 +134,66 @@ class UsersTableSeeder extends Seeder
 
         User::insert($users);*/
 
-        $user = Role::where('slug', '=', Role::USER)->first();
-        $array = [77000, 70000, 21000, 14000, 32000, 64000, 11000, 4000, 63000, 54000, 41000, 48000, 34000, 31000, 3000, 9000, 14000, 81000, 36000];
+        $userRole = Role::where('slug', '=', Role::USER)->first();
+
+        $firstNames = [
+            'Anna', 'Béla', 'Cecília', 'Dániel', 'Emília', 'Ferenc', 'Gábor', 'Hanna', 'István', 'János',
+            'Katalin', 'Lajos', 'Mária', 'Nóra', 'Orsolya', 'Péter', 'Quentin', 'Róbert', 'Szabolcs', 'Tamás',
+            'Ulrik', 'Vanda', 'Zsófia', 'Adél', 'Bence', 'Csaba', 'Dóra', 'Edina', 'Fanni', 'Gergő',
+            'Hedvig', 'Ibolya', 'Judit', 'Krisztián', 'László', 'Magdolna', 'Nikolett', 'Ottó', 'Pálma', 'Rita',
+            'Sára', 'Tibor', 'Ubul', 'Viktor', 'Zoltán', 'Ádám', 'Bálint', 'Csongor', 'Denes', 'Eszter'
+        ];
+
+        $lastNames = [
+            'Adorján', 'Bajnai', 'Csonka', 'Dudás', 'Erdélyi',
+            'Farkas', 'Győri', 'Hajdu', 'Illés', 'Juhász',
+            'Király', 'Lakatos', 'Magyar', 'Nagy', 'Orosz',
+            'Papp', 'Rácz', 'Sánta', 'Takács', 'Urbán',
+            'Varga', 'Zombori', 'Ács', 'Bakos', 'Csaba',
+            'Dömötör', 'Éliás', 'Fehér', 'Gál', 'Hegedűs',
+            'Iványi', 'Jeney', 'Kovács', 'Lakner', 'Molnár',
+            'Németh', 'Orbán', 'Pintér', 'Rajkai', 'Sipos',
+            'Tóth', 'Ujvári', 'Vámos', 'Zakariás', 'Árpád',
+            'Báthory', 'Czeglédi', 'Dienes', 'Egyed', 'Fodor'
+        ];
+
+        $amount = [
+            7000, 8000, 9000, 10000, 11000,
+            12000, 13000, 14000, 15000, 16000,
+            17000, 18000, 19000, 20000, 21000,
+            22000, 23000, 24000, 25000, 26000,
+            27000, 28000, 29000, 30000, 35000,
+            40000, 45000, 50000, 55000, 60000,
+            65000, 70000, 75000, 80000, 85000,
+            87000, 80000, 75000, 70000, 65000,
+            60000, 55000, 50000, 45000, 40000,
+            35000, 30000, 29000, 28000, 27000
+        ];
+
 
         for($x = 0; $x <= 100; $x++) {
-            $randomIndex = array_rand($array, 1);
-            $user = User::create([
+            $randomFirst = array_rand($firstNames);
+            $randomLast = array_rand($lastNames);
+            $randomAmount = array_rand($amount);
 
+            $name = mb_strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $firstNames[$randomFirst])) . mb_strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $lastNames[$randomLast]));
+
+            $user = User::create([
+                'name' => $name,
+                'first_name' => $firstNames[$randomFirst],
+                'last_name' => $lastNames[$randomLast ],
+                'email' => $name . '@gmail.com',
+                'email_verified_at' => now(),
+                'amount' => $amount[$randomAmount],
+                'password' =>'$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+                'verified' => 1,
+                'verified_at' => now(),
+                'verified' => 1,
+                'remember_token' => Str::random(10),
+                'newsletter' => true,
             ]);
 
+            $user->roles()->sync($userRole->id);
         }
     }
 
