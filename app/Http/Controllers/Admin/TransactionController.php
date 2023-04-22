@@ -106,6 +106,12 @@ class TransactionController extends Controller
     {
         abort_if(Gate::denies('transaction_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $user = User::find($transaction->user_id);
+
+        $user->update([
+            'amount' => $user->amount + $transaction->price
+        ]);
+
         $transaction->delete();
 
         return back();

@@ -9,28 +9,10 @@ use Illuminate\Http\Response;
 
 class StoreTransactionRequest extends FormRequest
 {
-    public function authorize()
-    {
-        return Gate::allows('transaction_create');
-    }
-
     public function rules()
     {
         return [
-            'users.*' => [
-                'integer',
-            ],
-            'users' => [
-                'required',
-                'array',
-            ],
-            'services.*' => [
-                'integer',
-            ],
-            'services' => [
-                'required',
-                'array',
-            ],
+
         ];
     }
 }

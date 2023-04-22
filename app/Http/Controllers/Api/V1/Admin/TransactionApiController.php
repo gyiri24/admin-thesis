@@ -4,57 +4,58 @@ namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTransactionRequest;
-use App\Http\Requests\UpdateTransactionRequest;
 use App\Http\Resources\Admin\TransactionResource;
+use App\Models\Service;
 use App\Models\Transaction;
-use Gate;
+use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class TransactionApiController extends Controller
 {
-    public function index()
-    {
-        abort_if(Gate::denies('transaction_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return new TransactionResource(Transaction::with(['users', 'services'])->get());
-    }
-
     public function store(StoreTransactionRequest $request)
     {
-        $transaction = Transaction::create($request->all());
-        $transaction->users()->sync($request->input('users', []));
-        $transaction->services()->sync($request->input('services', []));
+        $user = auth()->user();
+        $serviceSlug = $request->only('slug');
+        $service = Service::where('slug', '=', $serviceSlug)->first();
 
-        return (new TransactionResource($transaction))
-            ->response()
-            ->setStatusCode(Response::HTTP_CREATED);
+        if($user->amount < $service->price) {
+            abort_if(false, Response::HTTP_BAD_REQUEST, 'Bad request');
+        }
+
+        try{
+            $transaction = Transaction::create([
+                'price' => $service->price,
+                'service_id' => $service->id,
+                'user_id' => $user->id,
+            ]);
+
+            $user->update([
+                'amount' => $user->amount - $service->price
+            ]);
+
+            return (new TransactionResource($transaction))
+                ->response()
+                ->setStatusCode(Response::HTTP_CREATED);
+
+        } catch(Exception $e)
+        {
+            throw new UnprocessableEntityHttpException();
+        }
     }
 
     public function show(Transaction $transaction)
     {
-        abort_if(Gate::denies('transaction_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
         return new TransactionResource($transaction->load(['users', 'services']));
     }
 
-    public function update(UpdateTransactionRequest $request, Transaction $transaction)
+    public function getUserTransactions(Request $request)
     {
-        $transaction->update($request->all());
-        $transaction->users()->sync($request->input('users', []));
-        $transaction->services()->sync($request->input('services', []));
+        $user = auth()->user();
+        $transactions = Transaction::where('user_id', '=', $user->id)->get();
 
-        return (new TransactionResource($transaction))
-            ->response()
-            ->setStatusCode(Response::HTTP_ACCEPTED);
-    }
-
-    public function destroy(Transaction $transaction)
-    {
-        abort_if(Gate::denies('transaction_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $transaction->delete();
-
-        return response(null, Response::HTTP_NO_CONTENT);
+        return response()->json($transactions);
     }
 }
