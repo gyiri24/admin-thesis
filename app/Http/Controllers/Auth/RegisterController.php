@@ -66,4 +66,16 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
     }
+
+    public function store(UserRequest $request)
+    {
+        $data = $request->only(['name', 'email', 'password']);
+        $data['password'] = Hash::make($data['password']);
+        $user = User::create($data);
+
+        return response()->json(
+            UserResource::make($user),
+            Response::HTTP_CREATED
+        );
+    }
 }
