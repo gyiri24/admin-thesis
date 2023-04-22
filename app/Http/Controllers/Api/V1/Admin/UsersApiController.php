@@ -10,6 +10,9 @@ use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+
 
 class UsersApiController extends Controller
 {
@@ -56,5 +59,28 @@ class UsersApiController extends Controller
         $user->delete();
 
         return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if (Auth::attempt($request->only('email', 'password'))) {
+            $user = Auth::user();
+            $token = $user->createToken('api_token')->plainTextToken;
+            return response()->json(['api_token' => $token]);
+        }
+
+        throw ValidationException::withMessages([
+            'email' => ['The provided credentials are incorrect.'],
+        ]);
+    }
+
+    public function me(Request $request)
+    {
+        return auth()->user();
     }
 }

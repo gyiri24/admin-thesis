@@ -9,28 +9,17 @@ use Illuminate\Http\Response;
 
 class UpdateRatingRequest extends FormRequest
 {
-    public function authorize()
-    {
-        return Gate::allows('rating_edit');
-    }
-
     public function rules()
     {
         return [
-            'rating' => [
+            'rate' => [
                 'required',
             ],
             'comment' => [
                 'string',
                 'max:500',
                 'nullable',
-            ],
-            'services.*' => [
-                'integer',
-            ],
-            'services' => [
-                'array',
-            ],
+            ]
         ];
     }
 }

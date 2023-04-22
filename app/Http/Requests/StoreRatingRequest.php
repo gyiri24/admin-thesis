@@ -9,10 +9,6 @@ use Illuminate\Http\Response;
 
 class StoreRatingRequest extends FormRequest
 {
-    public function authorize()
-    {
-        return Gate::allows('rating_create');
-    }
 
     public function rules()
     {
@@ -24,10 +20,7 @@ class StoreRatingRequest extends FormRequest
                 'string',
                 'max:500',
                 'nullable',
-            ],
-            'services' => [
-                'integer',
-            ],
+            ]
         ];
     }
 }

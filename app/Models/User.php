@@ -14,10 +14,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use App\Models\Role;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use SoftDeletes, Notifiable, HasFactory;
+    use HasApiTokens, SoftDeletes, Notifiable, HasFactory;
 
     public $table = 'users';
 
@@ -152,5 +153,10 @@ class User extends Authenticatable
     public function services()
     {
         return $this->belongsTo(Service::class, 'user_id', 'id');
+    }
+
+    public function ratings()
+    {
+        return $this->belongsTo(Rating::class, 'id', 'user_id');
     }
 }

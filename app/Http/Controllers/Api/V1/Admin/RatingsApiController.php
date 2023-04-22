@@ -22,37 +22,64 @@ class RatingsApiController extends Controller
 
     public function store(StoreRatingRequest $request)
     {
-        $rating = Rating::create($request->all());
-        $rating->services()->sync($request->input('services', []));
+        $user = auth()->user();
+        $serviceId = $request->get('service_id');
+        $rating = $request->get('rating');
+        $comment = $request->get('comment');
 
-        return (new RatingResource($rating))
-            ->response()
-            ->setStatusCode(Response::HTTP_CREATED);
+        $rating = Rating::create([
+            'user_id' => $user->id,
+            'service_id' => $serviceId,
+            'rating' => $rating,
+            'comment' => $comment
+        ]);
+
+        return response()->json('Success', 200);
     }
 
     public function show(Rating $rating)
     {
-        abort_if(Gate::denies('rating_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $user = auth()->user();
+        $userRatings = Rating::where('user_id', '=', $user->id)->pluck('id')->toArray();
 
-        return new RatingResource($rating->load(['services']));
+        if(!in_array($rating->id, $userRatings)){
+            abort_if('You do not have permission to modify this rating.', 403);
+        }
+
+        return response()->json($rating);
     }
 
     public function update(UpdateRatingRequest $request, Rating $rating)
     {
-        $rating->update($request->all());
-        $rating->services()->sync($request->input('services', []));
+        $comment = $request->get('comment');
+        $rate = $request->get('rate');
 
-        return (new RatingResource($rating))
-            ->response()
-            ->setStatusCode(Response::HTTP_ACCEPTED);
+        $rating->update([
+            'rating' => $rate,
+            'comment' => $comment
+        ]);
+
+        return response()->json($rating);
     }
 
     public function destroy(Rating $rating)
     {
-        abort_if(Gate::denies('rating_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $user = auth()->user();
+        $userRatings = Rating::where('user_id', '=', $user->id)->pluck('id')->toArray();
+
+        if(!in_array($rating->id, $userRatings)){
+            abort_if('You do not have permission to modify this rating.', 403);
+        }
 
         $rating->delete();
-
         return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function getUserRatings(Request $request)
+    {
+        $user = auth()->user();
+        $ratings = Rating::where('user_id', '=', $user->id)->get();
+
+        return response()->json($ratings);
     }
 }
