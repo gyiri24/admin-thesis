@@ -6,29 +6,20 @@ use App\Http\Controllers\Api\V1\Admin\RatingsApiController;
 use App\Http\Controllers\Api\V1\Admin\TransactionApiController;
 use Illuminate\Support\Facades\Route;
 
+Route::post('/login', [UsersApiController::class, 'login']);
 
 Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', 'middleware' => ['auth:sanctum']], function () {
-    // Permissions
-    Route::apiResource('permissions', 'PermissionsApiController');
-
-    Route::apiResource('roles', 'RolesApiController');
-
-    // Users
     Route::apiResource('users', 'UsersApiController');
 
-    // Ratings
     Route::apiResource('ratings', 'RatingsApiController');
 
-    // Service
     Route::apiResource('services', 'ServiceApiController');
 
     Route::get('/me', [UsersApiController::class, 'me']);
+    Route::post('/logout', [UsersApiController::class, 'logout']);
 
     Route::get('/user/ratings', [RatingsApiController::class, 'getUserRatings']);
 
     Route::get('/user/transactions', [TransactionApiController::class, 'getUserTransactions']);
     Route::post('/user/transactions', [TransactionApiController::class, 'store']);
-
 });
-
-Route::post('/login', [UsersApiController::class, 'login']);
