@@ -41,10 +41,10 @@ class HomeController
     }
 
 // Létrehozni a diagramot
-$settings = [
-    'chart_title' => 'Dolgozók havi aggregált munkaideje',
-    'chart_type' => 'bar',
-    'report_type' => 'group_by_string',
+    $settings = [
+        'chart_title' => 'Dolgozók havi aggregált munkaideje',
+        'chart_type' => 'bar',
+        'report_type' => 'group_by_string',
     'model' => 'App\Models\Transaction',
     'group_by_field' => 'service_id',
     'aggregate_function' => 'sum',
@@ -53,7 +53,7 @@ $settings = [
     'column_class' => 'col-md-10',
 ];
 
-$chart1 = new LaravelChart($settings);
+        $chart1 = new LaravelChart($settings);
         /*$settings1 = [
             'chart_title'           => 'Havi átlagos regisztráció',
             'chart_type'            => 'line',
