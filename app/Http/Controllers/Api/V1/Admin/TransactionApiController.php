@@ -32,7 +32,9 @@ class TransactionApiController extends Controller
                 'user_id' => $user->id,
             ]);
 
-            $user->update([
+            $updatedUser = User::where('id', '=', $user->id)->first();
+
+            $updatedUser->update([
                 'amount' => $user->amount - $service->price
             ]);
 
