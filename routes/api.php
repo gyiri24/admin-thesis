@@ -1,11 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CourseController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\AuthController;
-
 Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', 'middleware' => ['auth:sanctum']], function () {
     // Permissions
     Route::apiResource('permissions', 'PermissionsApiController');
@@ -25,5 +19,3 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     // Transaction
     Route::apiResource('transactions', 'TransactionApiController');
 });
-
-Route::post('/auth/login',[AuthController::class,'login']);
