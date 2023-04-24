@@ -15,23 +15,23 @@ return new class extends Migration
     public function up()
     {
         DB::statement("
-        CREATE VIEW monthly_worker_hours AS
-        SELECT
-            users.id AS user_id,
-            CONCAT(users.first_name, ' ', users.last_name) AS worker_name,
-            EXTRACT(YEAR FROM transactions.created_at) AS year,
-            EXTRACT(MONTH FROM transactions.created_at) AS month,
-            SUM(services.duration) / 60 AS total_hours
-        FROM
-            transactions
-            JOIN services ON transactions.service_id = services.id
-            JOIN users ON services.user_id = users.id
-        GROUP BY
-            users.id,
-            CONCAT(users.first_name, ' ', users.last_name),
-            EXTRACT(YEAR FROM transactions.created_at),
-            EXTRACT(MONTH FROM transactions.created_at);
+            CREATE VIEW monthly_worker_hours AS
+            SELECT
+                CONCAT(u.first_name, ' ', u.last_name) as worker_name,
+                SUM(s.duration) as total_hours
+            FROM
+                transactions as t
+            JOIN
+                services as s ON t.service_id = s.id
+            JOIN
+                users as u ON s.user_id = u.id
+            WHERE
+                EXTRACT(YEAR FROM t.created_at) = EXTRACT(YEAR FROM NOW()) AND
+                EXTRACT(MONTH FROM t.created_at) = EXTRACT(MONTH FROM NOW())
+            GROUP BY
+                worker_name
         ");
+
     }
     /**
      * Reverse the migrations.

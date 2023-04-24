@@ -28,32 +28,36 @@ class HomeController
             'translation_key'       => 'service',
         ];*/
 
-    $transactions = Transaction::with('service.user')
-    ->selectRaw('service_id, sum(price) as total, MONTH(created_at) as month, YEAR(created_at) as year')
-    ->groupBy('service_id', 'month', 'year')
-    ->get();
-
-    $chartData = [];
-    foreach ($transactions as $transaction) {
-    $employee = $transaction->service->user->fullName;
-    $monthYear = Carbon::create($transaction->year, $transaction->month, 1)->format('Y-m');
-    $chartData[$employee][$monthYear] = $transaction->total;
-    }
 
 // Létrehozni a diagramot
-    $settings = [
-        'chart_title' => 'Dolgozók havi aggregált munkaideje',
-        'chart_type' => 'bar',
-        'report_type' => 'group_by_string',
-    'model' => 'App\Models\Transaction',
-    'group_by_field' => 'service_id',
-    'aggregate_function' => 'sum',
-    'aggregate_field' => 'amount',
-    'chart_data' => $chartData,
-    'column_class' => 'col-md-10',
-];
+        $currentMonth = date('n');
+        $month = [
+            1 => 'Január',
+            2 => 'Február',
+            3 => 'Március',
+            4 => 'Április',
+            5 => 'Május',
+            6 => 'Június',
+            7 => 'Július',
+            8 => 'Augusztus',
+            9 => 'Szeptember',
+            10 => 'Október',
+            11 => 'November',
+            12 => 'December'
+        ];
+        $settings1 = [
+            'chart_title'           => $month[$currentMonth] . ' ' . 'hónap dolgozói munkaórái',
+            'chart_type'            => 'bar',
+            'report_type'           => 'group_by_string',
+            'model'                 => 'App\Models\MonthlyWorkerHours',
+            'group_by_field'        => 'worker_name',
+            'aggregate_function'    => 'sum',
+            'aggregate_field'       => 'total_hours',
+            'column_class'          => 'col-md-6',
+            'translation_key'       => 'user',
+        ];
 
-        $chart1 = new LaravelChart($settings);
+        $chart1 = new LaravelChart($settings1);
         /*$settings1 = [
             'chart_title'           => 'Havi átlagos regisztráció',
             'chart_type'            => 'line',
@@ -75,36 +79,32 @@ class HomeController
         $chart1 = new LaravelChart($settings1);*/
 
         $settings2 = [
-            'chart_title'           => 'Havi',
-            'chart_type'            => 'line',
+            'chart_title'           => 'Havi regisztrációk',
+            'chart_type'            => 'bar',
             'report_type'           => 'group_by_date',
-            'model'                 => 'App\Models\Service',
+            'model'                 => 'App\Models\User',
             'group_by_field'        => 'created_at',
             'group_by_period'       => 'month',
             'aggregate_function'    => 'count',
             'filter_field'          => 'created_at',
-            'filter_period'         => 'year',
+            'filter_period'         => 'month',
             'group_by_field_format' => 'Y-m-d H:i:s',
-            'column_class'          => 'col-md-4',
-            'entries_number'        => '5',
-            'translation_key'       => 'service',
+            'column_class'          => 'col-md-12',
+            'entries_number'        => '12',
+            'translation_key'       => 'user',
         ];
 
         $chart2 = new LaravelChart($settings2);
 
         $settings3 = [
-            'chart_title'           => 'Éves',
-            'chart_type'            => 'line',
-            'report_type'           => 'group_by_date',
-            'model'                 => 'App\Models\Service',
-            'group_by_field'        => 'created_at',
-            'group_by_period'       => 'year',
-            'aggregate_function'    => 'count',
-            'filter_field'          => 'created_at',
-            'filter_period'         => 'year',
-            'group_by_field_format' => 'Y-m-d H:i:s',
-            'column_class'          => 'col-md-4',
-            'entries_number'        => '5',
+            'chart_title'           => 'Szolgáltatások átlagos értékelései',
+            'chart_type'            => 'bar',
+            'report_type'           => 'group_by_string',
+            'model'                 => 'App\Models\Rating',
+            'group_by_field'        => 'service_id',
+            'aggregate_function'    => 'avg',
+            'aggregate_field'       => 'rating',
+            'column_class'          => 'col-md-6',
             'translation_key'       => 'service',
         ];
 

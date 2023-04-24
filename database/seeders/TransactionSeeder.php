@@ -20,7 +20,7 @@ class TransactionSeeder extends Seeder
     {
         $userRole = Role::where('slug', '=', Role::USER)->first();
 
-        $createdAt = Carbon::create(2023, rand(1, 3), rand(1, 28), rand(8, 17), rand(0, 1) * 30);
+        $createdAt = Carbon::create(2023, 4/*rand(1, 3)*/, rand(1, 28), rand(8, 17), rand(0, 1) * 30);
 
         for ($i = 1; $i <= 500; $i++) {
             $service = Service::inRandomOrder()->first();
