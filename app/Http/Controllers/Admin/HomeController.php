@@ -11,26 +11,7 @@ class HomeController
 {
     public function index()
     {
-        /*$settings1 = [
-            'chart_title'           => 'Transactions by user',
-            'chart_type'            => 'bar',
-            'report_type'           => 'group_by_relationship',
-            'model'                 => 'App\Models\Service',
-            'relationship_name'     => 'user',
-            'group_by_field'        => 'user',
-            'aggregate_function'    => 'sum',
-            'aggregate_field'       => 'price',
-            'filter_field'          => 'created_at',
-            'filter_period'         => 'year',
-            'group_by_field_format' => 'Y-m-d H:i:s',
-            'column_class'          => 'col-md-4',
-            'entries_number'        => '5',
-            'translation_key'       => 'service',
-        ];*/
-
-
-// Létrehozni a diagramot
-        $currentMonth = date('n');
+        $currentMonth = date('n') - 1;
         $month = [
             1 => 'Január',
             2 => 'Február',
@@ -58,25 +39,6 @@ class HomeController
         ];
 
         $chart1 = new LaravelChart($settings1);
-        /*$settings1 = [
-            'chart_title'           => 'Havi átlagos regisztráció',
-            'chart_type'            => 'line',
-            'report_type'           => 'group_by_date',
-            'model'                 => 'App\Models\User',
-            'group_by_field'        => 'created_at',
-            'group_by_period'       => 'month',
-            'aggregate_function'    => 'count',
-            'calculate_average'     => true,
-            'filter_field'          => 'created_at',
-            'filter_period'         => 'month',
-            'group_by_field_format' => 'Y-m-d H:i:s',
-            'column_class'          => 'col-md-6',
-            'entries_number'        => '12',
-            'translation_key'       => 'user',
-        ];
-
-
-        $chart1 = new LaravelChart($settings1);*/
 
         $settings2 = [
             'chart_title'           => 'Havi regisztrációk',
@@ -164,6 +126,6 @@ class HomeController
 
         $chart6 = new LaravelChart($settings6);
 
-        return view('home', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6'));
+        return view('home', compact('chart1','chart3', 'chart2', 'chart4', 'chart5', 'chart6'));
     }
 }

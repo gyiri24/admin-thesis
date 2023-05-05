@@ -27,7 +27,7 @@ return new class extends Migration
                 users as u ON s.user_id = u.id
             WHERE
                 EXTRACT(YEAR FROM t.created_at) = EXTRACT(YEAR FROM NOW()) AND
-                EXTRACT(MONTH FROM t.created_at) = EXTRACT(MONTH FROM NOW())
+                EXTRACT(MONTH FROM t.created_at) = EXTRACT(MONTH FROM NOW() - INTERVAL 1 MONTH)
             GROUP BY
                 worker_name
         ");

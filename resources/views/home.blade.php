@@ -20,13 +20,13 @@
                             <h3>{!! $chart1->options['chart_title'] !!}</h3>
                             {!! $chart1->renderHtml() !!}
                         </div>
-                        <div class="{{ $chart2->options['column_class'] }}">
-                            <h3>{!! $chart2->options['chart_title'] !!}</h3>
-                            {!! $chart2->renderHtml() !!}
-                        </div>
                         <div class="{{ $chart3->options['column_class'] }}">
                             <h3>{!! $chart3->options['chart_title'] !!}</h3>
                             {!! $chart3->renderHtml() !!}
+                        </div>
+                        <div class="{{ $chart2->options['column_class'] }}">
+                            <h3>{!! $chart2->options['chart_title'] !!}</h3>
+                            {!! $chart2->renderHtml() !!}
                         </div>
                         <div class="{{ $chart4->options['column_class'] }}">
                             <h3>{!! $chart4->options['chart_title'] !!}</h3>
