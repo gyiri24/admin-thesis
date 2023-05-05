@@ -9,7 +9,6 @@ class TicketController extends Controller
     public function index()
     {
         $data = [
-            "available_tickets" => [
                 [
                     "name" => "Gyógytorna bérlet",
                     "price" => 70000,
@@ -17,10 +16,9 @@ class TicketController extends Controller
                 ],
                 [
                     "name" => "Masszázs bérlet",
-                    "price" => 70000,
-                    "usableAmount" => 77000
+                    "price" => 80000,
+                    "usableAmount" => 88000
                 ]
-            ]
         ];
 
         return response()->json($data);
